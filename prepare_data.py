@@ -153,7 +153,8 @@ def prepare(tasks, data_dir, shards_num = 1, max_images = None,
             "name": task,
             "dir": images_dir,
             "ratio": ratio,
-            "process": formats_catalog.get(format)
+            "process": formats_catalog.get(format),
+            "shards": shards_num,
         }))
 
         dirname = f"{data_dir}/{task}"
