@@ -668,10 +668,7 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
             img = img.resize((pow2size, pow2size), PIL.Image.ANTIALIAS)
 
             img = np.asarray(img)
-            if channels == 1:
-                img = img[np.newaxis, :, :] # HW => CHW
-            else:
-                img = img.transpose([2, 0, 1]) # HWC => CHW
+            img = img.transpose([2, 0, 1]) # HWC => CHW
             tfr.add_img(img)
 
 def create_from_tfds(dataset_dir, dataset_name, ratio = None, max_imgs = None):
