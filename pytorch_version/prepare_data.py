@@ -191,7 +191,7 @@ def run_cmdline(argv):
     # Create a new task with custom images
     parser.add_argument("--task",           help = "New dataset name", type = str, dest = "tasks", action = "append")
     parser.add_argument("--images-dir",     help = "Provide source image directory/file to convert into png-directory dataset (saves varied image resolutions)", default = None, type = str)
-    parser.add_argument("--format",         help = "Images format", default = None, choices = ["png", "jpg", "npy", "hdf5", "tfds", "lmdb", "tfrecords"], type = str)
+    parser.add_argument("--format",         help = "Images format", default = None, choices = ["png", "jpg", "img", "npy", "hdf5", "tfds", "lmdb", "tfrecords"], type = str)
     parser.add_argument("--ratio",          help = "Images height/width", default = 1.0, type = float)
 
     args = parser.parse_args()
