@@ -14,6 +14,7 @@ import io
 from tqdm import tqdm, trange
 from training import misc 
 import re
+from pathlib import Path
 
 def error(msg):
     print("Error: " + msg)
@@ -638,11 +639,6 @@ def is_image_ext(fname):
 def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio = None, 
         max_imgs = None):
     print("Loading images from %s" % img_dir)
-    # Original Code
-    #img_filenames = sorted(glob.glob(f"{img_dir}/**/*.{format}", recursive = True))
-    # Flexible code with support for multiple extensions
-    #input_images = [str(f) for f in sorted(Path(source_dir).rglob('*')) if is_image_ext(f) and os.path.isfile(f)]
-
     img_filenames = [str(f) for f in sorted(Path(img_dir).rglob('*')) if is_image_ext(f) and os.path.isfile(f)]
     if len(img_filenames) == 0:
         error("No input images found")
