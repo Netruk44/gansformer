@@ -79,6 +79,7 @@ catalog = {
 formats_catalog = {
     "png": lambda datadir, imgdir, **kwargs: dataset_tool.create_from_imgs(datadir, imgdir, format = "png", **kwargs),
     "jpg": lambda datadir, imgdir, **kwargs: dataset_tool.create_from_imgs(datadir, imgdir, format = "jpg", **kwargs),
+    "img": lambda datadir, imgdir, **kwargs: dataset_tool.create_from_imgs(datadir, imgdir, **kwargs),
     "npy": dataset_tool.create_from_npy, 
     "hdf5": dataset_tool.create_from_hdf5, 
     "tfds": dataset_tool.create_from_tfds, 

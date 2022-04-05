@@ -619,6 +619,13 @@ def create_celebahq(dataset_dir, celeba_dir, delta_dir, num_threads = 4, num_tas
 
 # ----------------------------------------------------------------------------
 
+def file_ext(name):
+    return str(name).split('.')[-1]
+
+def is_image_ext(fname):
+    ext = file_ext(fname).lower()
+    return f'.{ext}' in PIL.Image.EXTENSION # type: ignore
+
 # Creates TF records for images in a directory. Images are:
 # 1. Cropped to rectangle of size (s, ratio * s) (Optional)
 # 2. Padded to a square
@@ -628,10 +635,15 @@ def create_celebahq(dataset_dir, celeba_dir, delta_dir, num_threads = 4, num_tas
 # - dataset_dir: the output directory
 # - img_dir: the input directory
 # - shuffle: whether to shuffle the dataset before saving
-def create_from_imgs(dataset_dir, img_dir, format = "png", shuffle = False, ratio = None, 
+def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio = None, 
         max_imgs = None):
     print("Loading images from %s" % img_dir)
-    img_filenames = sorted(glob.glob(f"{img_dir}/**/*.{format}", recursive = True))
+    # Original Code
+    #img_filenames = sorted(glob.glob(f"{img_dir}/**/*.{format}", recursive = True))
+    # Flexible code with support for multiple extensions
+    #input_images = [str(f) for f in sorted(Path(source_dir).rglob('*')) if is_image_ext(f) and os.path.isfile(f)]
+
+    img_filenames = [str(f) for f in sorted(Path(img_dir).rglob('*')) if is_image_ext(f) and os.path.isfile(f)]
     if len(img_filenames) == 0:
         error("No input images found")
     if max_imgs is None:
