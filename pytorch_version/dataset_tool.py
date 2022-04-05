@@ -625,7 +625,7 @@ def file_ext(name):
 
 def is_image_ext(fname):
     ext = file_ext(fname).lower()
-    return f'.{ext}' in PIL.Image.EXTENSION # type: ignore
+    return f'.{ext}' in PIL.Image.registered_extensions() # type: ignore
 
 # Creates TF records for images in a directory. Images are:
 # 1. Cropped to rectangle of size (s, ratio * s) (Optional)
