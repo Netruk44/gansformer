@@ -639,7 +639,12 @@ def is_image_ext(fname):
 def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio = None, 
         max_imgs = None):
     print("Loading images from %s" % img_dir)
-    img_filenames = [str(f) for f in sorted(Path(img_dir).rglob('*')) if is_image_ext(f) and os.path.isfile(f)]
+    
+    glob_str = '*'
+    if format is not None:
+        glob_str += '.' + format
+
+    img_filenames = [str(f) for f in sorted(Path(img_dir).rglob(glob_str)) if is_image_ext(f) and os.path.isfile(f)]
     if len(img_filenames) == 0:
         error("No input images found")
     if max_imgs is None:
