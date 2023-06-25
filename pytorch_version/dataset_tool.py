@@ -680,6 +680,7 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
 
     # Multi-threaded version
     def process_func(idx):
+        # Part 1: Load image and preprocess
         img = PIL.Image.open(img_filenames[idx]).convert("RGB")
 
         img = misc.crop_max_rectangle(img, ratio)
@@ -690,7 +691,26 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
 
         img = np.asarray(img)
         img = img.transpose([2, 0, 1])
-        return img
+        #return img
+
+        # Part 2: Make LODs and save
+        shape = img.shape
+        resolution_log2 = int(np.log2(shape[1]))
+        assert shape[0] in [1, 2, 3]
+        assert shape[1] == shape[2]
+        assert shape[1] == 2**resolution_log2
+        #assert img.shape == self.shape
+
+        for lod in range(resolution_log2 - 1):
+            resolution = 2 ** (resolution_log2 - lod)
+            os.makedirs(f"{dataset_dir}/{resolution}", exist_ok = True)
+            if lod:
+                img = img.astype(np.float32)
+                img = (img[:, 0::2, 0::2] + img[:, 0::2, 1::2] + img[:, 1::2, 0::2] + img[:, 1::2, 1::2]) * 0.25
+            out_img = np.rint(img).clip(0, 255).astype(np.uint8)
+            out_img = PIL.Image.fromarray(out_img.transpose(1, 2, 0))
+            img_name = f"{dataset_dir}/{resolution}/{idx}.png"
+            out_img.save(img_name, format = "png")
 
     num_threads = 16
 
