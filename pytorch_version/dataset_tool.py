@@ -697,7 +697,12 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
     with DatasetExporter(dataset_dir, len(img_filenames)) as tfr:
         order = tfr.choose_shuffled_order() if shuffle else np.arange(len(img_filenames))
         with ThreadPool(num_threads) as pool:
-            for img in trange(pool.process_items_concurrently(order.tolist(), process_func = process_func)):
+            order_list = order.tolist()
+            item_count = len(order_list)
+            #for img in trange(pool.process_items_concurrently(order.tolist(), process_func = process_func)):
+            progress = tqdm(total = item_count)
+            for img in pool.process_items_concurrently(order_list, process_func = process_func):
+                progress.update()
                 tfr.add_img(img)
 
 def create_from_tfds(dataset_dir, dataset_name, ratio = None, max_imgs = None):
