@@ -723,7 +723,7 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
             progress = tqdm(total = item_count)
             for img in pool.process_items_concurrently(order_list, process_func = process_func):
                 progress.update()
-                tfr.add_img(img)
+                #tfr.add_img(img) - Moved into process_func
 
 def create_from_tfds(dataset_dir, dataset_name, ratio = None, max_imgs = None):
     import tensorflow_datasets as tfds
