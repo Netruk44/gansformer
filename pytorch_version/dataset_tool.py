@@ -661,6 +661,7 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
     # if resolution != 2 ** int(np.floor(np.log2(resolution))):
     #     error("Input image resolution must be a power-of-two")
 
+    '''
     with DatasetExporter(dataset_dir, len(img_filenames)) as tfr:
         order = tfr.choose_shuffled_order() if shuffle else np.arange(len(img_filenames))
         for idx in trange(max_imgs):
@@ -675,6 +676,29 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
             img = np.asarray(img)
             img = img.transpose([2, 0, 1]) # HWC => CHW
             tfr.add_img(img)
+    '''
+
+    # Multi-threaded version
+    def process_func(idx):
+        img = PIL.Image.open(img_filenames[idx]).convert("RGB")
+
+        img = misc.crop_max_rectangle(img, ratio)
+        img = misc.pad_min_square(img)
+
+        pow2size = 2 ** int(np.round(np.log2(img.size[0])))
+        img = img.resize((pow2size, pow2size), PIL.Image.ANTIALIAS)
+
+        img = np.asarray(img)
+        img = img.transpose([2, 0, 1])
+        return img
+
+    num_threads = 16
+
+    with DatasetExporter(dataset_dir, len(img_filenames)) as tfr:
+        order = tfr.choose_shuffled_order() if shuffle else np.arange(len(img_filenames))
+        with ThreadPool(num_threads) as pool:
+            for img in pool.process_items_concurrently(order.tolist(), process_func = process_func):
+                tfr.add_img(img)
 
 def create_from_tfds(dataset_dir, dataset_name, ratio = None, max_imgs = None):
     import tensorflow_datasets as tfds
