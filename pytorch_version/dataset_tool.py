@@ -711,6 +711,9 @@ def create_from_imgs(dataset_dir, img_dir, format = None, shuffle = False, ratio
             out_img = PIL.Image.fromarray(out_img.transpose(1, 2, 0))
             img_name = f"{dataset_dir}/{resolution}/{idx}.png"
             out_img.save(img_name, format = "png")
+        
+        # Return the original image
+        return img
 
     num_threads = 16
 
