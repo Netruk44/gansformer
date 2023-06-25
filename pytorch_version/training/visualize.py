@@ -67,9 +67,9 @@ def vis(G,
     ratio               = 1.0,        # Image height/width ratio in the dataset
     truncation_psi      = 0.7,        # Style strength multiplier for the truncation trick (used for visualizations only)
     # Model settings
-    k                   = 1,          # Number of components the model has
+    k                   = 16,          # Number of components the model has
     drange_net          = [-1,1],     # Model image output range
-    attention           = False,      # Whereas the model produces attention maps (for visualization)
+    attention           = True,      # Whereas the model produces attention maps (for visualization)
     num_heads           = 1,          # Number of attention heads
     # Visualization settings
     vis_types           = None,       # Visualization types to be created
@@ -161,13 +161,18 @@ def vis(G,
 
         # Save latent vectors
         if "ltnts" in vis:
+            latents = latents.cpu()
             misc.save_npys(latents, pattern_of("latents-z", step, "npy"), verbose, idx)
             misc.save_npys(wlatents, pattern_of("latents-w", step, "npy"), verbose, idx)
 
         # For the GANformer model, save attention maps
         if attention:
             if "maps" in vis:
-                pallete = np.expand_dims(misc.get_colors(k - 1), axis = [2, 3])
+                colors = misc.get_colors(k - 1)
+                #print(type(colors))
+                #print(colors)
+                #print(k)
+                pallete = np.expand_dims(colors, axis = [2, 3])
                 maps = (soft_maps == np.amax(soft_maps, axis = 1, keepdims = True)).astype(float)
 
                 soft_maps = np.sum(pallete * np.expand_dims(soft_maps, axis = 2), axis = 1)

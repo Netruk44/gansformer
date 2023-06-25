@@ -169,7 +169,7 @@ def training_loop(
     save_tf_graph           = False,    # Include full TensorFlow computation graph in the tfevents file?
     save_weight_histograms  = False,    # Include weight histograms in the tfevents file?
     img_snapshot_ticks      = 3,        # How often to save image snapshots? None = disable
-    network_snapshot_ticks  = 3,        # How often to save network snapshots? None = only save networks-final.pkl
+    network_snapshot_ticks  = 9,        # How often to save network snapshots? None = only save networks-final.pkl
     last_snapshots          = 10,       # Maximal number of prior snapshots to save
     eval_images_num         = 50000,    # Sample size for the metrics
     printname               = ""):       # Experiment name for logging

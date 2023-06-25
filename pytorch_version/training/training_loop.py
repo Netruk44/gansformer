@@ -330,14 +330,14 @@ def training_loop(
     resume_kimg             = 0.0,      # Assumed training progress at the beginning
                                         # Affects reporting and training schedule    
     kimg_per_tick           = 8,        # Progress snapshot interval
-    img_snapshot_ticks      = 3,        # How often to save image snapshots? None = disable
-    network_snapshot_ticks  = 3,        # How often to save network snapshots? None = disable    
-    last_snapshots          = 10,       # Maximal number of prior snapshots to save
+    img_snapshot_ticks      = 9,        # How often to save image snapshots? None = disable
+    network_snapshot_ticks  = 9,        # How often to save network snapshots? None = disable    
+    last_snapshots          = 2,       # Maximal number of prior snapshots to save
     printname               = "",       # Experiment name for logging
     # Evaluation
     vis_args                = {},       # Options for vis.vis
     metrics                 = [],       # Metrics to evaluate during training
-    eval_images_num         = 50000,    # Sample size for the metrics
+    eval_images_num         = 1000,    # Sample size for the metrics
     truncation_psi          = 0.7       # Style strength multiplier for the truncation trick (used for visualizations only)
 ):  
     # Initialize
